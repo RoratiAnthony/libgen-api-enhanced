@@ -259,3 +259,9 @@ Results are returned as a list of Book objects:
 ## Credits
 
 This library is a fork of [libgen-api](https://github.com/harrison-broadbent/libgen-api) written by [harrison-broadbent](https://github.com/harrison-broadbent).
+
+## Correções deste fork
+
+As consultas HTML, JSON e a resolução de download agora enviam cabeçalhos HTTP de navegador e possuem timeout. Sem esses cabeçalhos, os espelhos podem devolver uma página padrão do nginx sob HTTP 200 em vez do catálogo.
+
+O aplicativo Repertório, no repositório [repertorio](https://github.com/RoratiAnthony/repertorio), utiliza este fork e acrescenta fila, progresso, pausa/retomada, histórico local, verificação MD5 e novas tentativas para falhas HTTP temporárias.

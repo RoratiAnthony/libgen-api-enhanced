@@ -1,4 +1,5 @@
 import requests
+from .http_headers import DEFAULT_HEADERS
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin, parse_qs
 
@@ -63,13 +64,15 @@ class Book:
         md5 = self.md5
         parsed_url = urlparse(mirror_url)
         root_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
-        resp = requests.get(mirror_url, stream=True)
+        resp = requests.get(mirror_url, stream=True, headers=DEFAULT_HEADERS, timeout=(8, 30))
         resp.raise_for_status()
         content_type = resp.headers.get('Content-Type', '').lower()
         if 'text/html' not in content_type:
             self.resolved_download_link = mirror_url
+            resp.close()
             return
         soup = BeautifulSoup(resp.text, "html.parser")
+        resp.close()
         a = soup.find_all("a", string=lambda s: s and s.strip().upper() == "GET")
         if not a:
             raise ValueError("No GET links found on the mirror page")
